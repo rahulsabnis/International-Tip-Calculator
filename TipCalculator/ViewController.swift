@@ -33,16 +33,31 @@ class ViewController: UIViewController {
 
     @IBAction func calculateTip(_ sender: AnyObject) {
         
+        let currencyFormatter = NumberFormatter()
+        currencyFormatter.usesGroupingSeparator = true
+        currencyFormatter.numberStyle = NumberFormatter.Style.currency
+        // localize to your grouping and decimal separator
+        currencyFormatter.locale = NSLocale.current
+        
         slider.setValue(Float(lroundf(slider.value)), animated: true)
         
         tipPercentText.text = "\(slider.value)%"
+        
+//        var bill = NSString(string: billValue.text!).doubleValue
+//        var tip = NSString(string: slider.value!).doubleValue
         
         let bill = Double(billValue.text!) ?? 0
         let tip = bill * Double(slider.value / 100)
         let total = bill + tip
         
-        tipLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
+        tipLabel.text = currencyFormatter.string(from: NSNumber(value:tip))
+        totalLabel.text = currencyFormatter.string(from: NSNumber(value:total))
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let backItem = UIBarButtonItem()
+        backItem.title = "Back"
+        navigationItem.backBarButtonItem = backItem // This will show in the next view controller being pushed
     }
     
 }
